@@ -11,6 +11,7 @@
     "got": "^11.8.2",
     "json-to-pretty-yaml": "^1.2.2",
     "next": "10.x",
+    "node-fetch": "^2.6.1",
     "react": "17.x",
     "react-dom": "17.x"
   }
