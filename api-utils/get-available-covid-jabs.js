@@ -5,7 +5,9 @@ const https = require('https');
 let getCowinAPIData = async (requestUrl) => {
   return new Promise(async(resolve, reject) => {
 
-    https.get(requestUrl, (resp) => {
+    https.get(requestUrl, {
+      headers: {'User-Agent': 'API'}
+    }, (resp) => {
     let data = '';
     // A chunk of data has been received.
     resp.on('data', (chunk) => {
@@ -27,7 +29,7 @@ let getCowinAPIData = async (requestUrl) => {
 module.exports = async function(districtId, dateString, vaccineName) {
   let output;
   let requestUrl = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${districtId}&date=${dateString}&vaccine=${vaccineName}`;
-  console.log('Calling API using Got lib: ', requestUrl);
+  console.log('Calling API using Https lib: ', requestUrl);
   let cowinResponse = await getCowinAPIData(requestUrl);
   if(cowinResponse) {
     output = [];
