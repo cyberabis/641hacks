@@ -6,7 +6,10 @@ let getCowinAPIData = async (requestUrl) => {
   return new Promise(async(resolve, reject) => {
 
     https.get(requestUrl, {
-      headers: {'User-Agent': 'API'}
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36',
+        'Host': 'cdn-api.co-vin.in'
+      }
     }, (resp) => {
     let data = '';
     // A chunk of data has been received.
