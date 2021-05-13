@@ -13,6 +13,7 @@
     "next": "10.x",
     "node-fetch": "^2.6.1",
     "react": "17.x",
-    "react-dom": "17.x"
+    "react-dom": "17.x",
+    "superagent": "^6.1.0"
   }
 }
