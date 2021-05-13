@@ -40,7 +40,7 @@ export default async (request, response) => {
   else {
     let name = request.body.message.from.first_name ? ' ' + request.body.message.from.first_name : '';
     let invalidCommandMessage = `I could not get you${name}. Right now I only understand the following commands \\today, \\tomorrow, \\notify and \\mute.`;
-    sendTelegramMessage(request.body.message.chat.id, invalidCommandMessage, standardReplyMarkup, functions.config().covishieldjabs641bot.token);
+    sendTelegramMessage(request.body.message.chat.id, invalidCommandMessage, standardReplyMarkup, COVISHIELDJABS641BOT_TOKEN);
   }
 
   response.end();
