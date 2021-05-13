@@ -1,6 +1,7 @@
 let sendTelegramMessage = require('api-utils/send-telegram-message');
 let getAvailableCovidJabs = require('api-utils/get-available-covid-jabs');
 let getFormattedDate = require('api-utils/get-formatted-date');
+const db = require('api-utils/db');
 const YAML = require('json-to-pretty-yaml');
 
 const COVISHIELDJABS641BOT_TOKEN = process.env.COVISHIELDJABS641BOT_TOKEN;
@@ -30,11 +31,18 @@ export default async (request, response) => {
   } 
   
   else if (request.body && request.body.message && request.body.message.text === '/notify') {
-    
+    let name = request.body.message.from.first_name ? ' ' + request.body.message.from.first_name : '';
+    console.log('DB: ', db);
+    db.collection('usersToNotify').doc(request.body.message.chat.id+'').set({
+      name: name,
+      timestamp: new Date()
+    });
+    sendTelegramMessage(request.body.message.chat.id, 'Great, you will be notified!', undefined, COVISHIELDJABS641BOT_TOKEN);
   } 
   
   else if (request.body && request.body.message && request.body.message.text === '/mute') {
-    
+    db.collection('usersToNotify').doc(request.body.message.chat.id+'').delete();
+    sendTelegramMessage(request.body.message.chat.id, 'You will NOT be notified!', undefined, COVISHIELDJABS641BOT_TOKEN);
   } 
   
   else {
