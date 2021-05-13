@@ -9,7 +9,10 @@ module.exports = async function(districtId, dateString, vaccineName) {
     let {body} = await got.get(requestUrl, {
       responseType: 'json',
       headers: {
-        'User-Agent': 'abishek'
+        'User-Agent': 'PostmanRuntime/7.26.8',
+        'Cache-Control': 'no-cache',
+        'Origin': 'https://apisetu.gov.in',
+        'Accept': 'application/json'
       }
     });
     if(body && body.sessions) {
