@@ -7,8 +7,17 @@ let getCowinAPIData = async (requestUrl) => {
 
     https.get(requestUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36',
-        'Host': 'cdn-api.co-vin.in'
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36',
+        'Host': 'cdn-api.co-vin.in',
+        'Accept': 'application/json',
+        'Accept-Encoding': 'accept-encoding: gzip, deflate, br',
+        'Accept-Language': 'accept-language: en-US,en;q=0.9',
+        'Cache-Control': 'no-cache',
+        'Origin': 'https://apisetu.gov.in',
+        'Pragma': 'no-cache',
+        'Referer': 'https://apisetu.gov.in/public/marketplace/api/cowin',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'cross-site'
       }
     }, (resp) => {
     let data = '';
