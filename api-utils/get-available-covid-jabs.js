@@ -6,7 +6,12 @@ module.exports = async function(districtId, dateString, vaccineName) {
   let requestUrl = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${districtId}&date=${dateString}&vaccine=${vaccineName}`;
   console.log('Calling API using Got lib: ', requestUrl);
   try{
-    let {body} = await got.get(requestUrl, {responseType: 'json'});
+    let {body} = await got.get(requestUrl, {
+      responseType: 'json',
+      headers: {
+        'User-Agent': 'abishek'
+      }
+    });
     if(body && body.sessions) {
       output = [];
       for(let session of body.sessions) {
