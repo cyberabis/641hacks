@@ -34,7 +34,7 @@ module.exports = async function(districtId, dateString, vaccineName) {
       }
     }
   } catch (error) {
-    console.log(error.response.body);
+    console.log('Error while calling Cowin API: ', error);
   }
   return output;
 }
