@@ -6,11 +6,11 @@ module.exports = async function(districtId, dateString, vaccineName) {
   let requestUrl = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${districtId}&date=${dateString}&vaccine=${vaccineName}`;
   console.log('Calling API using Got lib: ', requestUrl);
   try{
-    let response = await fetch(requestUrl);
+    let response = await fetch(requestUrl, {headers: {'User-Agent': 'PostmanRuntime/7.26.8'}});
     let data = await response.json();
     if(data && data.sessions) {
       output = [];
-      for(let session of body.sessions) {
+      for(let session of data.sessions) {
         if (session.available_capacity > 0) {
           output.push({name: session.name, address: session.address + ', ' + session.pincode, availableCapacity: session.available_capacity});
         }
