@@ -21,7 +21,8 @@ export default async (request, response) => {
     let output = await getAvailableCovidJabs('539', today, 'COVISHIELD');
     let messageText;
     if(output) {
-      messageText = YAML.stringify(output);
+      if(output.length === 0) messageText = 'No centers available';
+      else messageText = 'Available centers:\n' + YAML.stringify(output);
     } else {
       messageText = 'We could not pull up the details now - probably too many requests. \nPlease try again after 10 minutes.';
     }
