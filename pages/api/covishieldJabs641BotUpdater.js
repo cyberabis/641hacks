@@ -23,7 +23,7 @@ export default async (request, response) => {
     let existing = [];
     if (existingAvailabilityDoc.exists) {
       console.log('Existing availability:', existingAvailabilityDoc.data());
-      existing = existingAvailabilityDoc.data().centers;
+      existing = existingAvailabilityDoc.data().centers ? existingAvailabilityDoc.data().centers : [];
     }
 
     //2.
