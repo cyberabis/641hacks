@@ -15,6 +15,13 @@ export default async (request, response) => {
     let name = request.body.message.from.first_name ? ' ' + request.body.message.from.first_name : '';
     let welcomeMessage = `Welcome${name}! I can help you know availability of Covishield vaccine in Coimbatore. You can use the following commands \\today, \\tomorrow, \\notify and \\mute.\n\n\\today and \\tomorrow will reply with list of available Covishield centers for today or tomorrow.\n\n\\notify will notify you as soon as a center becomes available and \\mute can be used to stop receiving notifications.`;
     sendTelegramMessage(request.body.message.chat.id, welcomeMessage, standardReplyMarkup, COVISHIELDJABS641BOT_TOKEN);
+    db.collection('activity').add({
+      chatId: request.body.message.chat.id,
+      fisrtName: request.body.message.from.first_name,
+      lastName: request.body.message.from.last_name,
+      activity: 'started',
+      timestamp: new Date()
+    });
   } 
   
   else if (request.body && request.body.message && (request.body.message.text === '/today' || request.body.message.text === '/tomorrow')) {
@@ -28,6 +35,13 @@ export default async (request, response) => {
       messageText = 'We could not pull up the details now - probably too many requests. \nPlease try again after 10 minutes.';
     }
     sendTelegramMessage(request.body.message.chat.id, messageText, undefined, COVISHIELDJABS641BOT_TOKEN);
+    db.collection('activity').add({
+      chatId: request.body.message.chat.id,
+      fisrtName: request.body.message.from.first_name,
+      lastName: request.body.message.from.last_name,
+      activity: 'checked-availability',
+      timestamp: new Date()
+    });
   } 
   
   else if (request.body && request.body.message && request.body.message.text === '/notify') {
@@ -37,12 +51,26 @@ export default async (request, response) => {
       name: name,
       timestamp: new Date()
     });
-    sendTelegramMessage(request.body.message.chat.id, 'Great, you will be notified!', undefined, COVISHIELDJABS641BOT_TOKEN);
+    sendTelegramMessage(request.body.message.chat.id, 'Great, you will be notified when a center becomes available!', undefined, COVISHIELDJABS641BOT_TOKEN);
+    db.collection('activity').add({
+      chatId: request.body.message.chat.id,
+      fisrtName: request.body.message.from.first_name,
+      lastName: request.body.message.from.last_name,
+      activity: 'enabled-notification',
+      timestamp: new Date()
+    });
   } 
   
   else if (request.body && request.body.message && request.body.message.text === '/mute') {
     db.collection('usersToNotify').doc(request.body.message.chat.id+'').delete();
     sendTelegramMessage(request.body.message.chat.id, 'You will NOT be notified!', undefined, COVISHIELDJABS641BOT_TOKEN);
+    db.collection('activity').add({
+      chatId: request.body.message.chat.id,
+      fisrtName: request.body.message.from.first_name,
+      lastName: request.body.message.from.last_name,
+      activity: 'disabled-notification',
+      timestamp: new Date()
+    });
   } 
   
   else {
