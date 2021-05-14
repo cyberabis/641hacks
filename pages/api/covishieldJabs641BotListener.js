@@ -9,19 +9,21 @@ const COVISHIELDJABS641BOT_TOKEN = process.env.COVISHIELDJABS641BOT_TOKEN;
 export default async (request, response) => {
   console.log('Got request: ', request.body);
 
+  let hitCommand;
   const standardReplyMarkup = {keyboard: [['/today'],['/tomorrow'],['/notify'],['/mute']]};
-  
+
   if(request.body && request.body.message && request.body.message.text === '/start') {
     let name = request.body.message.from.first_name ? ' ' + request.body.message.from.first_name : '';
-    let welcomeMessage = `Welcome${name}! I can help you know availability of Covishield vaccine in Coimbatore. You can use the following commands \\today, \\tomorrow, \\notify and \\mute.\n\n\\today and \\tomorrow will reply with list of available Covishield centers for today or tomorrow.\n\n\\notify will notify you as soon as a center becomes available and \\mute can be used to stop receiving notifications.`;
+    let welcomeMessage = `Welcome${name}! I can help you know availability of Covishield vaccine in Coimbatore. You can use the following commands /today, /tomorrow, /notify and /mute.\n\n/today and /tomorrow will reply with list of available Covishield centers for today or tomorrow.\n\n/notify will notify you as soon as a center becomes available and /mute can be used to stop receiving notifications.`;
     sendTelegramMessage(request.body.message.chat.id, welcomeMessage, standardReplyMarkup, COVISHIELDJABS641BOT_TOKEN);
     db.collection('activity').add({
       chatId: request.body.message.chat.id,
-      fisrtName: request.body.message.from.first_name,
+      firstName: request.body.message.from.first_name,
       lastName: request.body.message.from.last_name,
       activity: 'started',
       timestamp: new Date()
     });
+    hitCommand = 'start';
   } 
   
   else if (request.body && request.body.message && (request.body.message.text === '/today' || request.body.message.text === '/tomorrow')) {
@@ -37,11 +39,12 @@ export default async (request, response) => {
     sendTelegramMessage(request.body.message.chat.id, messageText, undefined, COVISHIELDJABS641BOT_TOKEN);
     db.collection('activity').add({
       chatId: request.body.message.chat.id,
-      fisrtName: request.body.message.from.first_name,
+      firstName: request.body.message.from.first_name,
       lastName: request.body.message.from.last_name,
       activity: 'checked-availability',
       timestamp: new Date()
     });
+    hitCommand = request.body.message.text.substring(1);
   } 
   
   else if (request.body && request.body.message && request.body.message.text === '/notify') {
@@ -54,11 +57,12 @@ export default async (request, response) => {
     sendTelegramMessage(request.body.message.chat.id, 'Great, you will be notified when a center becomes available!', undefined, COVISHIELDJABS641BOT_TOKEN);
     db.collection('activity').add({
       chatId: request.body.message.chat.id,
-      fisrtName: request.body.message.from.first_name,
+      firstName: request.body.message.from.first_name,
       lastName: request.body.message.from.last_name,
       activity: 'enabled-notification',
       timestamp: new Date()
     });
+    hitCommand = 'notify';
   } 
   
   else if (request.body && request.body.message && request.body.message.text === '/mute') {
@@ -66,18 +70,29 @@ export default async (request, response) => {
     sendTelegramMessage(request.body.message.chat.id, 'You will NOT be notified!', undefined, COVISHIELDJABS641BOT_TOKEN);
     db.collection('activity').add({
       chatId: request.body.message.chat.id,
-      fisrtName: request.body.message.from.first_name,
+      firstName: request.body.message.from.first_name,
       lastName: request.body.message.from.last_name,
       activity: 'disabled-notification',
       timestamp: new Date()
     });
+    hitCommand = 'mute';
   } 
   
   else {
     let name = request.body.message.from.first_name ? ' ' + request.body.message.from.first_name : '';
-    let invalidCommandMessage = `I could not get you${name}. Right now I only understand the following commands \\today, \\tomorrow, \\notify and \\mute.`;
+    let invalidCommandMessage = `I could not get you${name}. Right now I only understand the following commands /today, /tomorrow, /notify and /mute.`;
     sendTelegramMessage(request.body.message.chat.id, invalidCommandMessage, standardReplyMarkup, COVISHIELDJABS641BOT_TOKEN);
+    hitCommand = 'none';
   }
+
+  db.collection('messages').add({
+    chatId: request.body.message.chat.id,
+    firstName: request.body.message.from.first_name,
+    lastName: request.body.message.from.last_name,
+    message: request.body.message.text,
+    hitCommand: hitCommand,
+    timestamp: new Date()
+  });
 
   response.end();
 }
