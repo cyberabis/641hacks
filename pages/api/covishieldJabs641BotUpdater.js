@@ -46,7 +46,7 @@ export default async (request, response) => {
     }
     if(tomorrowAvailability && tomorrowAvailability.length) {
       for(let center of tomorrowAvailability) {
-        let found = existing.find(x => x.name === center.name && x.when === today)
+        let found = existing.find(x => x.name === center.name && x.when === tomorrow)
         if(!found) newAvailability.push({...center, when: tomorrow});
         update.push({...center, when: tomorrow});
       }
