@@ -64,7 +64,7 @@ export default async (request, response) => {
       let snapshot = await usersRef.get();
       snapshot.forEach(doc => {
         console.log('Messaging user: ', doc.data().name);
-        sendTelegramMessage(doc.id, 'Newly available centers:\n' + message, undefined, COVISHIELDJABS641BOT_TOKEN);
+        //sendTelegramMessage(doc.id, 'Newly available centers:\n' + message, undefined, COVISHIELDJABS641BOT_TOKEN);
       });
     }
 

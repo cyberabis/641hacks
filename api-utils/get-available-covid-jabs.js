@@ -22,7 +22,8 @@ let getCowinAPIData = async (requestUrl) => {
 
 module.exports = async function(districtId, dateString, vaccineName) {
   let output;
-  let requestUrl = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${districtId}&date=${dateString}&vaccine=${vaccineName}`;
+  //let requestUrl = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${districtId}&date=${dateString}&vaccine=${vaccineName}`;
+  let requestUrl = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${districtId}&date=${dateString}`;
   console.log('Calling API using Https lib: ', requestUrl);
   let cowinResponse = await getCowinAPIData(requestUrl);
   if(cowinResponse) {
