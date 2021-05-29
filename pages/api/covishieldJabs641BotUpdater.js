@@ -33,6 +33,9 @@ export default async (request, response) => {
     let tomorrow = getFormattedDate('tomorrow');
     let tomorrowAvailability = await getAvailableCovidJabs('539', tomorrow, 'COVISHIELD');
     console.log('Tomorrow availability: ', tomorrowAvailability);
+    let dayAfterTomorrow = getFormattedDate('dayAfterTomorrow');
+    let dayAfterTomorrowAvailability = await getAvailableCovidJabs('539', dayAfterTomorrow, 'COVISHIELD');
+    console.log('Day After Tomorrow availability: ', dayAfterTomorrowAvailability);
 
     //3. 
     let newAvailability = [];
@@ -51,6 +54,13 @@ export default async (request, response) => {
         update.push({...center, when: tomorrow});
       }
     }
+    if(dayAfterTomorrowAvailability && dayAfterTomorrowAvailability.length) {
+      for(let center of dayAfterTomorrowAvailability) {
+        let found = existing.find(x => x.name === center.name && x.when === dayAfterTomorrow)
+        if(!found) newAvailability.push({...center, when: dayAfterTomorrow});
+        update.push({...center, when: dayAfterTomorrow});
+      }
+    }
     console.log('New availability: ', newAvailability);
     console.log('DB update: ', update);
 
@@ -64,7 +74,7 @@ export default async (request, response) => {
       let snapshot = await usersRef.get();
       snapshot.forEach(doc => {
         console.log('Messaging user: ', doc.data().name);
-        //sendTelegramMessage(doc.id, 'Newly available centers:\n' + message, undefined, COVISHIELDJABS641BOT_TOKEN);
+        sendTelegramMessage(doc.id, 'Newly available centers:\n' + message, undefined, COVISHIELDJABS641BOT_TOKEN);
       });
     }
 
