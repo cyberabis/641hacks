@@ -29,7 +29,7 @@ module.exports = async function(districtId, dateString, vaccineName) {
   if(cowinResponse) {
     output = [];
     for(let session of cowinResponse.sessions) {
-      if (session.available_capacity > 1) {
+      if (session.available_capacity > 10) {
         output.push({name: session.name + (session.min_age_limit ? ` (${session.min_age_limit}+)` : ''), address: session.address + ', ' + session.pincode, availableCapacity: `${session.available_capacity} - ${session.vaccine}`});
       }
     }
